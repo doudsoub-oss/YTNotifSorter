@@ -81,4 +81,3 @@ These are the state IDs observed in practice; you may occasionally come across o
 ## Notes
 
 - The script relies on YouTube's internal page data (`ytInitialData`), so it may break whenever YouTube changes its front-end.
-- It only reads your own account data for personal use, but scraping a logged-in page is a gray area under YouTube's Terms of Service.
