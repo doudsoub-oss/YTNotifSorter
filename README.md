@@ -62,7 +62,6 @@ The script scrolls to load all of your subscriptions, then prints and copies to 
   const matches = out.filter(c => c.state === ALL).map(c => c.name).sort();
   console.log(`${matches.length} / ${out.length} channels with bell state ${ALL}:\n` + matches.join('\n'));
   copy(matches.join('\n'));
-  console.log('\n✅ Copied to clipboard.');
 })();
 ```
 
