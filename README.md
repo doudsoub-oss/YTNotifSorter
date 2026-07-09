@@ -10,8 +10,8 @@ A script to display all the youtube chanel you follow which have all the notific
 *The console might give you an error message telling to write `allow pasting` before being able to actually paste some code to it*
 
 You can change the value of the `ALL` variable to display the other state of notifications.
-- **0** = YT chanel from which you recieve **no** notificaitons
-- **2** = YT chanel from which you recieve **all** the notificaitons
+- **0** = YT chanel from which you recieve **NO** notificaitons at all
+- **2** = YT chanel from which you recieve **ALL** the notificaitons
 - **3** = YT chanel that youtube recommends you through notifications
 
 ```
@@ -62,5 +62,3 @@ You can change the value of the `ALL` variable to display the other state of not
   console.log('\nCopied to clipboard.');
 })();
 ```
-
-`window.__bells` holds the full list with states if you ever need to inspect the other buckets. (The full list of subscription )
