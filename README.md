@@ -1,22 +1,25 @@
 # YTNotifSorter
-A script to display all the youtube chanel you follow which have all the notifications enabled.
+
+A browser-console script that lists every YouTube channel you're subscribed to whose notification bell is set to **All**.
+
+It reads the data straight from YouTube's own *Manage subscriptions* page, so there's nothing to install and no API key required.
 
 ## Usage
-- First you need to be connected to your youtube account
-- Go to youtube.com/feed/channels
-- Open DevTools (F12)
-- Go to the console
-- Finally paste this script :
-*The console might give you an error message telling to write `allow pasting` before being able to actually paste some code to it*
 
-You can change the value of the `ALL` variable to display the other state of notifications.
-- **0** = YT chanel from which you recieve **NO** notificaitons at all
-- **2** = YT chanel from which you recieve **ALL** the notificaitons
-- **3** = YT chanel that youtube recommends you through notifications
+1. Sign in to your YouTube account.
+2. Go to [youtube.com/feed/channels](https://www.youtube.com/feed/channels).
+3. Open DevTools (`F12`) and switch to the **Console** tab.
+4. Paste the script below and press `Enter`.
 
-```
+> **Note:** the first time you paste into the console, the browser may block it for security and ask you to type `allow pasting` before it lets you paste code.
+
+The script scrolls to load all of your subscriptions, then prints and copies to your clipboard the list of channels set to **All**.
+
+## Script
+
+```js
 (async () => {
-  const ALL = 2;                                  // bell state : "0" = "None", 2 = "All", 3 = "Personalized"
+  const ALL = 2;                                  // bell state to filter (see table below)
   const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   // 1. Force YouTube to lazy-load every subscription
@@ -54,11 +57,28 @@ You can change the value of the `ALL` variable to display the other state of not
     for (const k in o) walk(o[k]);
   })(ytInitialData);
 
-  // 3. Filter to "All", print, and copy to clipboard
+  // 3. Filter to the chosen state, print, and copy to clipboard
   window.__bells = out;
-  const allChannels = out.filter(c => c.state === ALL).map(c => c.name).sort();
-  console.log(`${allChannels.length} / ${out.length} channels set to "All":\n` + allChannels.join('\n'));
-  copy(allChannels.join('\n'));
-  console.log('\nCopied to clipboard.');
+  const matches = out.filter(c => c.state === ALL).map(c => c.name).sort();
+  console.log(`${matches.length} / ${out.length} channels with bell state ${ALL}:\n` + matches.join('\n'));
+  copy(matches.join('\n'));
+  console.log('\n✅ Copied to clipboard.');
 })();
 ```
+
+## Notification states
+
+Change the `ALL` variable at the top of the script to filter by a different bell state:
+
+| Value | Meaning |
+|-------|---------|
+| `0`   | **None** — no notifications at all |
+| `2`   | **All** — every notification |
+| `3`   | **Personalized** — YouTube decides which notifications to send you |
+
+These are the state IDs observed in practice; you may occasionally come across others. The full list of subscriptions and their states is kept in `window.__bells` after the script runs, so you can inspect any bucket manually.
+
+## Notes
+
+- The script relies on YouTube's internal page data (`ytInitialData`), so it may break whenever YouTube changes its front-end.
+- It only reads your own account data for personal use, but scraping a logged-in page is a gray area under YouTube's Terms of Service.
